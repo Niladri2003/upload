@@ -62,33 +62,7 @@ ALTER TABLE public.addresses OWNER TO postgres;
 -- Name: cart_items; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.cart_items (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    cart_id uuid NOT NULL,
-    product_id uuid NOT NULL,
-    quantity integer NOT NULL,
-    price numeric(10,2) NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT cart_items_quantity_check CHECK ((quantity > 0))
-);
 
-
-ALTER TABLE public.cart_items OWNER TO postgres;
-
---
--- Name: carts; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.carts (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    user_id uuid NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-
-ALTER TABLE public.carts OWNER TO postgres;
 
 --
 -- Name: categories; Type: TABLE; Schema: public; Owner: postgres
@@ -222,21 +196,6 @@ COPY public.addresses (id, user_id, first_name, last_name, country, street_addre
 \.
 
 
---
--- Data for Name: cart_items; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.cart_items (id, cart_id, product_id, quantity, price, created_at, updated_at) FROM stdin;
-\.
-
-
---
--- Data for Name: carts; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.carts (id, user_id, created_at, updated_at) FROM stdin;
-\.
-
 
 --
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -341,21 +300,6 @@ ALTER TABLE ONLY public.addresses
     ADD CONSTRAINT addresses_pkey PRIMARY KEY (id);
 
 
---
--- Name: cart_items cart_items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart_items
-    ADD CONSTRAINT cart_items_pkey PRIMARY KEY (id);
-
-
---
--- Name: carts carts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.carts
-    ADD CONSTRAINT carts_pkey PRIMARY KEY (id);
-
 
 --
 -- Name: categories categories_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
@@ -444,29 +388,6 @@ ALTER TABLE ONLY public.users
 ALTER TABLE ONLY public.addresses
     ADD CONSTRAINT addresses_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
-
---
--- Name: cart_items cart_items_cart_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart_items
-    ADD CONSTRAINT cart_items_cart_id_fkey FOREIGN KEY (cart_id) REFERENCES public.carts(id) ON DELETE CASCADE;
-
-
---
--- Name: cart_items cart_items_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cart_items
-    ADD CONSTRAINT cart_items_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(id) ON DELETE SET NULL;
-
-
---
--- Name: carts carts_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.carts
-    ADD CONSTRAINT carts_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
